@@ -22,7 +22,10 @@
   <body>
     <div id="app">
       <h3>Всего {{ users.length }} пользователей</h3>
-      <table>
+      <div class="controls">
+        <button v-on:click="toggleShowUsers">{{ toggleUsersButtonLabel }}</button>
+      </div>
+      <table v-show="userListShown">
         <tr v-for="user in users">
           <td>{{ user.firstName }}</td>
           <td>{{ user.patronymic }}</td>
@@ -42,8 +45,20 @@
         data: function() {
           return {
             message: 'Hello Vue?!?',
+            // THIS DOES NOT WORK...
+            // toggleUsersButtonLabel: function() {
+            //   return this.userListShown ? 'Скрыть пользователей' : 'Показать пользователей'
+            // },
+            toggleUsersButtonLabel: 'Скрыть пользователей',
             users: User.getUsersSync(),
+            userListShown: true,
           };
+        },
+        methods: {
+          toggleShowUsers: function() {
+            this.userListShown = !this.userListShown;
+            this.toggleUsersButtonLabel = this.userListShown ? 'Скрыть пользователей' : 'Показать пользователей';
+          },
         },
       });
     </script>
