@@ -42,14 +42,19 @@
     <script>
       var app = new Vue({
         el: '#app',
+        computed: {
+          toggleUsersButtonLabel: {
+            get: function() {
+              return this.userListShown ? 'Скрыть пользователей' : 'Показать пользователей';
+            },
+            set: function() {
+              // DO I HAVE TO PROVIDE SETTER TO AVOID WARNING?
+            },
+          },
+        },
         data: function() {
           return {
             message: 'Hello Vue?!?',
-            // THIS DOES NOT WORK...
-            // toggleUsersButtonLabel: function() {
-            //   return this.userListShown ? 'Скрыть пользователей' : 'Показать пользователей'
-            // },
-            toggleUsersButtonLabel: 'Скрыть пользователей',
             users: User.getUsersSync(),
             userListShown: true,
           };
