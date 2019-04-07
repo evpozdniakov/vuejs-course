@@ -89,7 +89,7 @@
         },
         filters: {
           uppercase: function(val) {
-            return `${val}`.toUpperCase();
+            return val && val.toUpperCase ? val.toUpperCase() : '';
           },
         },
         methods: {
