@@ -28,7 +28,7 @@
       <div class="controls">
         <button type="button" v-on:click="toggleShowUsers">{{ toggleShowUsersLabel }}</button>
       </div>
-      <table v-show="userListShown">
+      <table v-if="userListShown">
         <tr v-for="user in users" v-bind:key="user.id">
           <td>{{ user.firstName }}</td>
           <td>{{ user.patronymic }}</td>
