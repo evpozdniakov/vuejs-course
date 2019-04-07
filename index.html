@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <link rel="stylesheet" href="./static/css/tooltip.css" />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/v-tooltip"></script>
     <script src="./user.js"></script>
     <style>
       [v-cloak] {
@@ -24,6 +26,7 @@
   </head>
   <body>
     <div id="app" v-cloak>
+      <h1>{{ greating }}</h1>
       <h3>Всего {{ users.length }} пользователей</h3>
       <div class="controls">
         <button type="button" v-on:click="toggleShowUsers">{{ toggleShowUsersLabel }}</button>
@@ -39,11 +42,15 @@
               :-)
             </p>
           </td>
-          <td><button type="button" v-copy="user.id">Copy</button></td>
+          <td>
+            <button type="button" v-copy="user.id" v-tooltip="makeUserCopyToClipboardTooltipText(user.id)">Copy</button>
+          </td>
         </tr>
       </table>
     </div>
     <script>
+      Vue.directive('tooltip', VTooltip.VTooltip);
+
       var app = new Vue({
         el: '#app',
         computed: {
@@ -53,7 +60,7 @@
         },
         data: function() {
           return {
-            message: 'Hello Vue?!?',
+            greating: 'Hello',
             users: User.getUsersSync(),
             userListShown: true,
           };
@@ -86,6 +93,12 @@
           },
         },
         methods: {
+          makeUserCopyToClipboardTooltipText: function(userId) {
+            var user = User.getById(userId);
+            if (user) {
+              return `Скопировать "${user.fullName}"`;
+            }
+          },
           toggleShowUsers: function() {
             this.userListShown = !this.userListShown;
           },
