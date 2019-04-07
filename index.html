@@ -23,10 +23,10 @@
     <div id="app">
       <h3>Всего {{ users.length }} пользователей</h3>
       <div class="controls">
-        <button v-on:click="toggleShowUsers">{{ toggleUsersButtonLabel }}</button>
+        <button v-on:click="toggleShowUsers">{{ toggleShowUsersLabel }}</button>
       </div>
       <table v-show="userListShown">
-        <tr v-for="user in users">
+        <tr v-for="user in users" v-bind:key="user.id">
           <td>{{ user.firstName }}</td>
           <td>{{ user.patronymic }}</td>
           <td>{{ user.lastName | uppercase }}</td>
@@ -36,6 +36,7 @@
               :-)
             </p>
           </td>
+          <td><button v-copy="user.id">Copy</button></td>
         </tr>
       </table>
     </div>
@@ -43,15 +44,9 @@
       var app = new Vue({
         el: '#app',
         computed: {
-          toggleUsersButtonLabel: {
-            get: function() {
-              return this.userListShown ? 'Скрыть пользователей' : 'Показать пользователей';
-            },
-            set: function() {
-              // DO I HAVE TO PROVIDE SETTER TO AVOID WARNING?
-            },
+          toggleShowUsersLabel: function() {
+            return this.userListShown ? 'Скрыть пользователей' : 'Показать пользователей';
           },
-          usersShown: true,
         },
         data: function() {
           return {
@@ -59,6 +54,28 @@
             users: User.getUsersSync(),
             userListShown: true,
           };
+        },
+        directives: {
+          copy: {
+            inserted: function(el, binding) {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                el.onclick = function() {
+                  var user = User.getById(binding.value);
+
+                  navigator.clipboard
+                    .writeText(user.fullName)
+                    .then(function() {
+                      // done
+                    })
+                    .catch(function(err) {
+                      alert(err.message);
+                    });
+                };
+              } else {
+                el.style.display = 'none';
+              }
+            },
+          },
         },
         filters: {
           uppercase: function(val) {
@@ -68,7 +85,6 @@
         methods: {
           toggleShowUsers: function() {
             this.userListShown = !this.userListShown;
-            this.toggleUsersButtonLabel = this.userListShown ? 'Скрыть пользователей' : 'Показать пользователей';
           },
         },
       });
