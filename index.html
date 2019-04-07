@@ -7,9 +7,21 @@
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="./user.js"></script>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+      td {
+        padding: 0.5rem 1rem;
+      }
+      tr:nth-child(n + 2) td {
+        border-top: 3px solid #eee;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
+      <h3>Всего {{ users.length }} пользователей</h3>
       <table>
         <tr v-for="user in users">
           <td>{{ user.firstName }}</td>
