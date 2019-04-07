@@ -29,7 +29,7 @@
         <tr v-for="user in users">
           <td>{{ user.firstName }}</td>
           <td>{{ user.patronymic }}</td>
-          <td>{{ user.lastName }}</td>
+          <td>{{ user.lastName | uppercase }}</td>
           <td>
             <img v-if="user.avatar" height="40" v-bind:src="user.avatar" />
             <p v-else>
@@ -51,6 +51,7 @@
               // DO I HAVE TO PROVIDE SETTER TO AVOID WARNING?
             },
           },
+          usersShown: true,
         },
         data: function() {
           return {
@@ -58,6 +59,11 @@
             users: User.getUsersSync(),
             userListShown: true,
           };
+        },
+        filters: {
+          uppercase: function(val) {
+            return `${val}`.toUpperCase();
+          },
         },
         methods: {
           toggleShowUsers: function() {
