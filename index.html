@@ -9,47 +9,28 @@
     <script src="./user.js"></script>
   </head>
   <body>
-    <div id="app">{{ message }}</div>
+    <div id="app">
+      <table>
+        <tr v-for="user in users">
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.patronymic }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>
+            <img v-if="user.avatar" height="40" v-bind:src="user.avatar" />
+            <p v-else>
+              :-)
+            </p>
+          </td>
+        </tr>
+      </table>
+    </div>
     <script>
-      var users = [
-        new User(
-          'Владимир',
-          'Владимирович',
-          'Маяковский',
-          'https://upload.wikimedia.org/wikipedia/commons/1/18/Mayakovsky_1915.jpg',
-        ),
-        new User(
-          'Анна',
-          'Андреевна',
-          'Горенко',
-          'https://upload.wikimedia.org/wikipedia/commons/e/e6/Kuzma_petrov-vodkin%2C_ritratto_di_anna_akhmatova%2C_1922.JPG',
-        ),
-        new User(
-          'Николай',
-          'Степанович',
-          'Гумилев',
-          'https://en.wikipedia.org/wiki/Nikolay_Gumilyov#/media/File:Ngumil.jpg',
-        ),
-        new User(
-          'Александр',
-          'Александрович',
-          'Блок',
-          'https://en.wikipedia.org/wiki/Alexander_Blok#/media/File:Alexander_Blok.jpeg',
-        ),
-        new User(
-          'Игорь',
-          'Васильевич',
-          'Лотарев',
-          'https://ru.wikipedia.org/wiki/%D0%A1%D0%B5%D0%B2%D0%B5%D1%80%D1%8F%D0%BD%D0%B8%D0%BD,_%D0%98%D0%B3%D0%BE%D1%80%D1%8C#/media/File:Igor_Severyanin.jpg',
-        ),
-      ];
-
       var app = new Vue({
         el: '#app',
         data: function() {
           return {
             message: 'Hello Vue?!?',
-            users: users,
+            users: User.getUsersSync(),
           };
         },
       });
