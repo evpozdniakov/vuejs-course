@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css" />
     <link rel="stylesheet" href="./static/css/tooltip.css" />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/v-tooltip"></script>
@@ -13,39 +15,50 @@
       [v-cloak] {
         display: none;
       }
-      table {
-        border-collapse: collapse;
+      body {
+        padding: 2rem;
       }
-      td {
-        padding: 0.5rem 1rem;
+      .table img {
+        max-height: 100px;
       }
-      tr:nth-child(n + 2) td {
-        border-top: 3px solid #eee;
+      button.copy {
+        font-size: 3rem;
       }
     </style>
   </head>
   <body>
     <div id="app" v-cloak>
-      <h1>{{ greating }}</h1>
-      <h3>Всего {{ users.length }} пользователей</h3>
+      <h1 class="title">{{ greating }}</h1>
+      <h3 class="subtitle">Всего {{ users.length }} пользователей</h3>
       <div class="controls">
-        <button type="button" v-on:click="toggleShowUsers">{{ toggleShowUsersLabel }}</button>
+        <button class="button" type="button" v-on:click="toggleShowUsers">{{ toggleShowUsersLabel }}</button>
       </div>
-      <table v-if="userListShown">
-        <tr v-for="user in users" v-bind:key="user.id">
-          <td>{{ user.firstName }}</td>
-          <td>{{ user.patronymic }}</td>
-          <td>{{ user.lastName | uppercase }}</td>
-          <td>
-            <img v-if="user.avatar" height="40" v-bind:src="user.avatar" />
-            <p v-else>
-              :-)
-            </p>
-          </td>
-          <td>
-            <button type="button" v-copy="user.id" v-tooltip="makeUserCopyToClipboardTooltipText(user.id)">Copy</button>
-          </td>
-        </tr>
+      <table v-if="userListShown" class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th colspan="3">ФИО</th>
+            <th>фото</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" v-bind:key="user.id">
+            <td>
+              <a v-copy="user.id" v-tooltip="makeUserCopyToClipboardTooltipText(user.id)">
+                <i class="icon ion-md-copy" style="font-size: 32px"></i>
+              </a>
+            </td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.patronymic }}</td>
+            <td>{{ user.lastName | uppercase }}</td>
+            <td>
+              <img v-if="user.avatar" v-bind:src="user.avatar" />
+              <p v-else>
+                :-)
+              </p>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <script>
