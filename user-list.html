@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>List of users</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="./static/css/app.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <h1 class="title">{{ title }}</h1>
+    </div>
+    <script>
+      var app = new Vue({
+        el: '#app',
+        mounted: function() {
+          var self = this;
+
+          fetch('https://jsonplaceholder.typicode.com/users')
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(data) {
+              self.users = data;
+              console.log('Данные загружены');
+            });
+        },
+        computed: {},
+        data: function() {
+          return {
+            title: 'Список пользователей',
+            users: [],
+          };
+        },
+        methods: {},
+      });
+    </script>
+  </body>
+</html>
