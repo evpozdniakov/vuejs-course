@@ -16,7 +16,15 @@
     </div>
 
     <template id="user-profile">
-      <h1>hi there profile</h1>
+      <div>
+        <h2 class="subtitle">{{ user.name }}</h2>
+        <form>
+          <p>
+            Имя:<br />
+            <input v-bind:value="user.name" />
+          </p>
+        </form>
+      </div>
     </template>
 
     <script>
