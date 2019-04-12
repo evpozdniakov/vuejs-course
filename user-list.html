@@ -21,6 +21,9 @@
           <tr v-for="user in users" v-bind:key="user.id">
             <td>{{ user.name }}</td>
             <td>({{ user.username }})</td>
+            <td>
+              <button @click="openUserProfile(user.id)" type="button" class="button is-small is-outlined">Edit</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -29,6 +32,11 @@
       var UserList = {
         data: function() {
           return {};
+        },
+        methods: {
+          openUserProfile: function(id) {
+            location.href = `./edit-user.html#${id}`;
+          },
         },
         props: {
           users: {
