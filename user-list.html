@@ -12,10 +12,40 @@
   <body>
     <div id="app" v-cloak>
       <h1 class="title">{{ title }}</h1>
+      <user-list v-bind:users="users"></user-list>
     </div>
+
+    <template id="user-list">
+      <table class="table">
+        <tbody>
+          <tr v-for="user in users" v-bind:key="user.id">
+            <td>{{ user.name }}</td>
+            <td>({{ user.username }})</td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
     <script>
+      var UserList = {
+        data: function() {
+          return {};
+        },
+        props: {
+          users: {
+            type: Array,
+            default: function() {
+              return [];
+            },
+          },
+        },
+        template: '#user-list',
+      };
+
       var app = new Vue({
         el: '#app',
+        components: {
+          'user-list': UserList,
+        },
         mounted: function() {
           var self = this;
 
