@@ -12,18 +12,23 @@
   <body>
     <div id="app" v-cloak>
       <h1 class="title">{{ title }}</h1>
-      <user-form v-if="user" v-bind:user="user"></user-form>
+      <user-form v-bind:user="user"></user-form>
     </div>
 
     <template id="user-profile">
-      <div>
-        <h2 class="subtitle">{{ user.name }}</h2>
-        <form>
-          <p>
-            Имя:<br />
-            <input v-bind:value="user.name" />
-          </p>
-        </form>
+      <div class="user-profile">
+        <div v-if="user">
+          <h2 class="subtitle">{{ user.name }}</h2>
+          <form>
+            <p>
+              Имя:<br />
+              <input v-bind:value="user.name" />
+            </p>
+          </form>
+        </div>
+        <div v-else>
+          <p>Данные загружаются</p>
+        </div>
       </div>
     </template>
 
@@ -43,28 +48,39 @@
         components: {
           'user-form': UserForm,
         },
-        computed: {},
         data: function() {
           return {
             title: 'Профиль пользователя',
-            user: null,
+            user: {},
           };
         },
-        methods: {},
+        methods: {
+          loadUserById(id) {
+            return fetch(`https://jsonplaceholder.typicode.com/users/${id}`).then(function(response) {
+              return response.json();
+            });
+          },
+          readUserIdFromUrl() {
+            var userIdStr = location.hash.substr(1);
+            var userId = parseInt(userIdStr, 10);
+
+            if (userId > 0) {
+              return Promise.resolve(userId);
+            }
+
+            return Promise.reject(new Error('Unable to read user id from location.hash'));
+          },
+        },
         mounted: function() {
           var self = this;
-          var userId = location.hash.substr(1);
-
-          if (parseInt(userId, 10) > 0) {
-            fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
-              .then(function(response) {
-                return response.json();
-              })
-              .then(function(data) {
-                self.user = data;
-                console.log('Данные загружены');
-              });
-          }
+          this.readUserIdFromUrl()
+            .then(this.loadUserById)
+            .then(function(data) {
+              self.user = data;
+            })
+            .catch(function(error) {
+              console.warn(error);
+            });
         },
       });
     </script>

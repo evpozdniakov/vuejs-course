@@ -62,8 +62,6 @@
       </table>
     </div>
     <script>
-      Vue.directive('tooltip', VTooltip.VTooltip);
-
       var app = new Vue({
         el: '#app',
         computed: {
@@ -74,7 +72,7 @@
         data: function() {
           return {
             greating: 'Hello',
-            users: User.getUsersSync(),
+            users: [],
             userListShown: true,
           };
         },
@@ -87,9 +85,9 @@
 
                   navigator.clipboard
                     .writeText(user.fullName)
-                    .then(function() {
-                      //
-                    })
+                    /* .then(function() {
+                      // TODO сообщить пользователю, что данные успешно скопированы
+                    }) */
                     .catch(function(err) {
                       console.error(err);
                     });
@@ -99,6 +97,7 @@
               }
             },
           },
+          tooltip: VTooltip.VTooltip,
         },
         filters: {
           uppercase: function(val) {
@@ -106,6 +105,9 @@
           },
         },
         methods: {
+          loadUsers() {
+            this.users = User.getUsersSync();
+          },
           makeUserCopyToClipboardTooltipText: function(userId) {
             var user = User.getById(userId);
             if (user) {
@@ -115,6 +117,9 @@
           toggleShowUsers: function() {
             this.userListShown = !this.userListShown;
           },
+        },
+        mounted() {
+          this.loadUsers();
         },
       });
     </script>

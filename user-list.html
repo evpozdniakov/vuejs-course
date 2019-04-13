@@ -22,7 +22,9 @@
             <td>{{ user.name }}</td>
             <td>({{ user.username }})</td>
             <td>
-              <button @click="openUserProfile(user.id)" type="button" class="button is-small is-outlined">Edit</button>
+              <button v-on:click="openUserProfile(user.id)" type="button" class="button is-small is-outlined">
+                Edit
+              </button>
             </td>
           </tr>
         </tbody>
@@ -30,9 +32,6 @@
     </template>
     <script>
       var UserList = {
-        data: function() {
-          return {};
-        },
         methods: {
           openUserProfile: function(id) {
             location.href = `./edit-user.html#${id}`;
@@ -55,25 +54,28 @@
           'user-list': UserList,
         },
         mounted: function() {
-          var self = this;
-
-          fetch('https://jsonplaceholder.typicode.com/users')
-            .then(function(response) {
-              return response.json();
-            })
-            .then(function(data) {
-              self.users = data;
-              console.log('Данные загружены');
-            });
+          this.loadUsers();
         },
-        computed: {},
         data: function() {
           return {
             title: 'Список пользователей',
             users: [],
           };
         },
-        methods: {},
+        methods: {
+          loadUsers() {
+            var self = this;
+
+            fetch('https://jsonplaceholder.typicode.com/users')
+              .then(function(response) {
+                return response.json();
+              })
+              .then(function(data) {
+                self.users = data;
+                console.log('Данные загружены');
+              });
+          },
+        },
       });
     </script>
   </body>
