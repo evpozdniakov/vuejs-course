@@ -54,7 +54,9 @@
           'user-list': UserList,
         },
         mounted: function() {
-          this.loadUsers();
+          this.loadUsers().catch(function(error) {
+            console.warn(error);
+          });
         },
         data: function() {
           return {
